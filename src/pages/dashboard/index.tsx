@@ -1,16 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import Head from "next/head";
 import styles from "./styles.module.scss"
-
 import { Header } from '../../components/Header'
 import { FiRefreshCcw } from 'react-icons/fi'
-
 import { setupApiClient } from "../../services/api";
-
 import { ModalOrder } from '../../components/ModalOrder'
-
 import Modal from 'react-modal'
+import { AuthContext } from "../../contexts/AuthContext";
+
 
 
 type OrderProps = {
@@ -44,10 +42,24 @@ export type OrderItemProps = {
 }
 
 export default function dashboard({ orders }: HomeProps) {
+  const { socket, isConnected } = useContext(AuthContext);
+  const apiClient = setupApiClient();
   const [orderList, setOrderList] = useState(orders || []);
 
   const [modalItem, setModalItem] = useState<OrderItemProps[]>()
   const [modalVisible, setModalVisible] = useState(false)
+
+
+
+  useEffect(()=>{
+    socket?.on('refresh', () => {
+      async function refresh(){
+        const response = await apiClient.get('/orders')
+        setOrderList(response.data)
+      }
+      refresh()
+    });
+  }, [isConnected])
 
   function handleCloseModal(){
     setModalVisible(false);
@@ -61,7 +73,7 @@ export default function dashboard({ orders }: HomeProps) {
       }
     })
     setModalItem(response.data)
-    setModalVisible(true)
+    setModalVisible(true);
   }
 
   async function handleFinishItem(id: string){
@@ -71,6 +83,7 @@ export default function dashboard({ orders }: HomeProps) {
     })
 
     const response = await apiClient.get('/orders')
+    socket.emit("message")
     setOrderList(response.data)
     setModalVisible(false)
   }
@@ -80,6 +93,7 @@ export default function dashboard({ orders }: HomeProps) {
     const response = await apiClient.get('/orders')
     setOrderList(response.data)
   }
+  
 
   Modal.setAppElement('#__next');
   return (

@@ -13,10 +13,6 @@ interface ModalOrderProps{
 }
 
 export function ModalOrder({isOpen, onRequestClose, order, handleFinishOrder}: ModalOrderProps){
-
-    console.log(order);
-    
-
     const customStyles = {
         content:{
             top: '50%', 
@@ -49,12 +45,14 @@ export function ModalOrder({isOpen, onRequestClose, order, handleFinishOrder}: M
                 <span className={styles.table}>
                     Mesa: <strong>{order[0].order.table}</strong>
                 </span>
+                <div className={styles.containerProduct}>
                 {order.map(item => (
                     <section key={item.id} className={styles.containerItem}>
                         <span>{item.amount} - <strong>{item.product.name}</strong></span>
                         <span className={styles.description}>{item.product.description}</span>
                     </section>
                 ))}
+                </div>
                 <button className={styles.buttonOrder} onClick={()=>{handleFinishOrder(order[0].order.id)}}>
                     Concluir pedido
                 </button>

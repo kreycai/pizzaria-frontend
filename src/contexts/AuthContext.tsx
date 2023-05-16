@@ -3,6 +3,9 @@ import { api } from "../services/apiClient";
 import { destroyCookie, setCookie, parseCookies } from 'nookies'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
+import { Socket } from 'socket.io-client';
+import io from 'socket.io-client';
+
 
 type AuthContextData = {
     user: UserProps;
@@ -10,6 +13,8 @@ type AuthContextData = {
     signIn: (credentials: SignInProps) => Promise<void>
     signOut: () => void
     signUp: (credentials: SignUpProps) => Promise<void> 
+    socket: Socket
+    isConnected: boolean
 }
 
 type UserProps = {
@@ -45,6 +50,8 @@ export function signOut(){
 }
 
 export function AuthProvider({children}: AuthProviderProps){
+    const [isConnected, setIsConnected] = useState(false);
+    const [ socket, setSocket ] = useState(null)
     const [user, setUser] = useState<UserProps>()
     const isAuthenticated = !!user;
 
@@ -55,6 +62,11 @@ export function AuthProvider({children}: AuthProviderProps){
             api.get('/me').then(response=>{
                 const {id, name, email} = response.data
                 setUser({id, name, email})
+                const socket = io('http://localhost:3333');
+                setSocket(socket)
+                if(socket){
+                    setIsConnected(true)
+                }
             })
             .catch(()=>{
                 signOut()
@@ -113,7 +125,7 @@ export function AuthProvider({children}: AuthProviderProps){
     }
 
     return (
-        <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut, signUp}}>
+        <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut, signUp, socket, isConnected}}>
             {children}
         </AuthContext.Provider>
     )

@@ -3,7 +3,22 @@
     padding: 0;
     outline: 0;
     box-sizing: border-box;
+
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+      
+    ::-webkit-scrollbar-track {
+        background: #1D1D2E;
+    }
+      
+    ::-webkit-scrollbar-thumb {
+        background-color: #101026;
+        border-radius: 20px;
+    }
+
 }
+
 
 :root{
     --white: #fff;

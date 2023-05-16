@@ -2,6 +2,7 @@
     width: 620px;
     background-color: var(--dark-700);
     color: var(--white);
+    overflow-y: scroll;
 }
 
 .container h2{
@@ -16,6 +17,11 @@
     strong{
         color: var(--green-900);
     }
+}
+
+.containerProduct{
+    height: 10rem;
+    overflow-y: scroll;
 }
 
 .description{

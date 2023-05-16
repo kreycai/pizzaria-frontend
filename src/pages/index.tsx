@@ -74,17 +74,6 @@ export default function Home() {
   );
 }
 
-//EXEMPLO DO GETSERSIDEPROPS PURO SEM CHECAGEM ALGUMA DE TOKEN ETC
-// export const getServerSideProps: GetServerSideProps = async (ctx) =>{
-//     console.log("testando serversideprops"); 
-    
-//     return{
-//       props:{
-  
-//       }
-//     }
-// }
-
 export const getServerSideProps = canSSRGuest(async (ctx) => {
   return{
     props: {}

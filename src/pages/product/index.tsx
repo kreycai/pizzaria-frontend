@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent, useEffect, DOMElement, SelectHTMLAttributes } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import Head from "next/head";
 import styles from './styles.module.scss';
 import { Header } from "../../components/Header";
@@ -62,8 +62,8 @@ export default function Product({categoryList}: CategoryProps){
     }
 
     function handleChangeCategory(e){
-        //console.log("posição da categoria selecionada", e.target.value);
-        // console.log("categoria selecionada", categories[e.target.value]);
+        console.log("posição da categoria selecionada", e.target.value);
+        console.log("categoria selecionada", categories[e.target.value]);
         setCategorySelected(e.target.value)
     }
 
@@ -128,12 +128,9 @@ export default function Product({categoryList}: CategoryProps){
                             )}
                         </label>
                         <select className="select" value={categorySelected} onChange={handleChangeCategory}>
-                            <option value={0}>
-                                Escolha uma categoria
-                            </option>
                             {categories.map((item, index)=>{
                                 return(
-                                    <option key={item.id} value={index + 1}>
+                                    <option key={item.id} value={index}>
                                         {item.name}
                                     </option>
                                 )

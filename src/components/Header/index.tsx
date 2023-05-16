@@ -14,6 +14,9 @@ export function Header(){
                     <img src="/logo.svg"  width={190} height={60} alt="imgFail" />
                 </Link>
                 <nav className={styles.menuNav}>
+                    <Link href="/order" legacyBehavior>
+                        <a>Criar novo pedido</a>
+                    </Link>
                     <Link className='lk' href="/category" legacyBehavior>
                         <a>Categoria</a>
                     </Link>

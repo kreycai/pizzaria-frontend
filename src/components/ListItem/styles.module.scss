@@ -1,0 +1,20 @@
+.container{
+    display: flex;
+    background-color: #101026;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border-width: 0.3px;
+    border-color: #8a8a8a;
+
+    button{
+        background-color: #101026;
+        border: none;
+    }
+}
+.item{
+    color: #fff
+}
