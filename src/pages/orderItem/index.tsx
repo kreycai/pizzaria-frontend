@@ -18,7 +18,8 @@ export type CategoryProps = {
 
 type ProductProps = {
     id: string,
-    name: string
+    name: string,
+    price: string
 }
 
 type ItemsProps = {
@@ -26,6 +27,7 @@ type ItemsProps = {
     product_id: string;
     name:string;
     amount: string | number;
+    price: string;
 }
 
 type QueryParams = {
@@ -47,7 +49,7 @@ export default function OrderItem(){
     const [modalVisible, setModalVisible] = useState(false)
     const [amount, setAmount] = useState('1')
     const [items, setItems] = useState<ItemsProps[]>([])
-
+    const [totalOrder, setTotalOrder] = useState(0)
 
     useEffect(()=>{
         async function loadInfo(){
@@ -55,7 +57,7 @@ export default function OrderItem(){
             setCategory(response.data)
         }
         loadInfo()
-    }, [])
+    }, [totalOrder])
 
     useEffect(()=>{
         async function loadProducts(){
@@ -108,9 +110,11 @@ export default function OrderItem(){
                 id: response.data.id,
                 product_id: product[productSelected].id as string,
                 name: product[productSelected].name as string,
-                amount: amount
+                amount: amount as string,
+                price: product[productSelected].price as string
             }
             setItems(oldArray => [...oldArray, data])
+            setTotalOrder(e => (Number(product[productSelected].price) * Number(amount)) + e)
         } catch (error) {
             console.log("error:", error);
             Router.push('/order')
@@ -153,6 +157,10 @@ export default function OrderItem(){
 
     function handleCloseModal(){
         setModalVisible(false)
+    }
+
+    function subProduct(subValue: string){
+        setTotalOrder(value => value - Number(subValue))
     }
 
     Modal.setAppElement('#__next');
@@ -198,7 +206,7 @@ export default function OrderItem(){
                         {product?.map((item:ProductProps, index:number)=>{
                                 return(
                                     <option key={item.id} value={index} style={{color: '#fff'}}>
-                                        {item?.name}
+                                        {item?.name} - R${Number(item?.price).toFixed(2).replace('.', ',')}
                                     </option>
                                 )
                             })}
@@ -239,10 +247,12 @@ export default function OrderItem(){
                 <div style={{ marginTop: 24}} className={styles.divItems}>
                     {items.map((item)=>{
                         return(
-                            <ListItem key={item.id} data={item} deleteItem={handleDeleteItem}/>
+                            <ListItem key={item.id} data={item} deleteItem={handleDeleteItem} subValue={subProduct} />
                         )
                     })}
                 </div>
+                <hr />
+                <h2 className={styles.total} >Total do pedido: R${totalOrder.toFixed(2).replace('.', ',')}</h2>
             </main>
         {modalVisible && 
           <ModalFinish

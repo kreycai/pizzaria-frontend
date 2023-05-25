@@ -17,6 +17,7 @@ type OrderProps = {
   status: boolean;
   draft: boolean;
   name: string | null
+  items: OrderItemProps[]
 }
 interface HomeProps{
   orders: OrderProps[];
@@ -42,15 +43,13 @@ export type OrderItemProps = {
 }
 
 export default function dashboard({ orders }: HomeProps) {
-  const { socket, isConnected } = useContext(AuthContext);
+  const {socket, isConnected} = useContext(AuthContext);
   const apiClient = setupApiClient();
   const [orderList, setOrderList] = useState(orders || []);
 
   const [modalItem, setModalItem] = useState<OrderItemProps[]>()
   const [modalVisible, setModalVisible] = useState(false)
-
-
-
+  
   useEffect(()=>{
     socket?.on('refresh', () => {
       async function refresh(){
@@ -83,7 +82,7 @@ export default function dashboard({ orders }: HomeProps) {
     })
 
     const response = await apiClient.get('/orders')
-    socket.emit("message")
+    socket?.emit("message")
     setOrderList(response.data)
     setModalVisible(false)
   }
@@ -122,7 +121,7 @@ export default function dashboard({ orders }: HomeProps) {
               <section key={item.id} className={styles.orderItem}>
                 <button onClick={() => handleOpenModalView(item.id)}>
                   <div className={styles.tag}></div>
-                  <span>{item.table}</span>
+                  <span>Mesa {item.table}</span>
                 </button>
               </section>
             ))}

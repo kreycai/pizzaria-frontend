@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react'
 import Modal from "react-modal";
 import styles from './styles.module.scss';
 
@@ -24,6 +25,15 @@ export function ModalOrder({isOpen, onRequestClose, order, handleFinishOrder}: M
             backgroundColor: '#1d1d2e'
         }
     }
+    const [totalOrder, setTotalOrder] = useState(0)
+    let total = 0
+
+    useEffect(()=>{
+        order.forEach((e)=>{
+            total += (Number(e.product.price) * e.amount)
+        })
+        setTotalOrder(total)
+    }, [])
 
     return(
         <Modal
@@ -48,14 +58,17 @@ export function ModalOrder({isOpen, onRequestClose, order, handleFinishOrder}: M
                 <div className={styles.containerProduct}>
                 {order.map(item => (
                     <section key={item.id} className={styles.containerItem}>
-                        <span>{item.amount} - <strong>{item.product.name}</strong></span>
+                        <span>{item.amount} - <strong>{item.product.name} - R${Number(item.product.price) * item.amount}</strong></span>
                         <span className={styles.description}>{item.product.description}</span>
                     </section>
                 ))}
                 </div>
-                <button className={styles.buttonOrder} onClick={()=>{handleFinishOrder(order[0].order.id)}}>
-                    Concluir pedido
-                </button>
+                    <div className={styles.divButton}>
+                    <button className={styles.buttonOrder} onClick={()=>{handleFinishOrder(order[0].order.id)}}>
+                        Concluir pedido
+                    </button>
+                    <h3 className={styles.total}>Total do pedido: R${totalOrder.toFixed(2).replace('.', ',')}</h3>
+                </div>
             </div>
         </Modal>
     )

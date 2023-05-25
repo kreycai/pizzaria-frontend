@@ -28,7 +28,7 @@ export default function Order(){
         })
         
         // navigation.navigate('Order', {order_id: response.data.id , number: number})
-        Router.push({pathname: '/orderItem', query: {order_id: response.data.id, table: number} as QueryParams}, '/orderItem')
+        Router.push({pathname: '/orderItem', query: {order_id: response.data.id, table: number} as QueryParams})
 
 
         setNumber('')

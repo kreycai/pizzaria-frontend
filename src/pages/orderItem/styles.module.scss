@@ -9,6 +9,7 @@
     padding-top: 2rem;
     max-width: 720px;
     height: 100vh;
+    min-width: 330px;
 }
 .header{
     display: flex;
@@ -85,7 +86,8 @@
 }
 
 .divItems{
-    height: 19rem;
+    // height: 17rem;
+    height: calc(100vh - 340px);
     overflow-y: scroll;
 }
 .divItems::-webkit-scrollbar {
@@ -101,3 +103,7 @@
     border-radius: 20px;
 }
 
+.total{
+    color: #fff;
+    padding: 2rem 0;
+}
